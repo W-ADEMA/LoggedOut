@@ -24,7 +24,6 @@ import java.io.IOException;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin {
-
     private String type;
     private String world;
     private String address;
@@ -149,7 +148,7 @@ public class TitleScreenMixin {
             CallbackInfoReturnable<Boolean> cir
     ) {
         // Only respond to left mouse button
-        if (event.button() != 0) {
+        if (event.button() != 1) {
             return;
         }
 
