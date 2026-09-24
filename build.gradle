@@ -59,8 +59,16 @@ jar {
 	inputs.property "projectName", projectName
 
 	from("LICENSE") {
-		rename { "${it}_$projectName"}
+		rename { "${it}_$projectName" }
 	}
+}
+
+base {
+	archivesName = "loggedout"
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+	archiveVersion = "${project.version}+mc.${project.minecraft_version}"
 }
 
 // configure the maven publication
