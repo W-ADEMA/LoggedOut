@@ -36,9 +36,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	implementation "com.terraformersmc:modmenu:18.0.1"
+	implementation "com.terraformersmc:modmenu:21.0.0"
 
-	implementation "dev.isxander:yet-another-config-lib:3.9.7+26.1-fabric"
+	implementation "dev.isxander:yet-another-config-lib:3.9.7+26.3-fabric"
 }
 
 processResources {

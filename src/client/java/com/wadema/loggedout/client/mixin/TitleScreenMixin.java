@@ -122,7 +122,7 @@ public class TitleScreenMixin {
                         && scaledMouseY < bottomRightY + padding - 2;
 
         // Left mouse button
-        if (isHovered && event.button() == 0) {
+        if (isHovered && event.button() == 1) {
             String textToCopy = String.join("\n", Arrays.copyOfRange(lines, 2, lines.length));
 
             minecraft.keyboardHandler.setClipboard(textToCopy);
