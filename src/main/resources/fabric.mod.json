@@ -21,6 +21,9 @@
 		],
 		"client": [
 			"com.wadema.loggedout.client.LoggedOutClient"
+		],
+		"modmenu": [
+			"com.wadema.loggedout.client.LoggedOutModMenu"
 		]
 	},
 	"mixins": [
@@ -34,6 +37,8 @@
 		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.1.2",
 		"java": ">=25",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"modmenu": "*",
+		"yet_another_config_lib_v3": "*"
 	}
 }

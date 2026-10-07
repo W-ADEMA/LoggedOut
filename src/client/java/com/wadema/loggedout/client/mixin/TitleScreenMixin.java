@@ -1,5 +1,7 @@
 package com.wadema.loggedout.client.mixin;
 
+import com.wadema.loggedout.LoggedOutConfig;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.Gson;
@@ -32,7 +34,7 @@ public class TitleScreenMixin {
             "No logout location has been detected yet"
     };
 
-    private float scale = 1.0f;
+    private final LoggedOutConfig config = new LoggedOutConfig();
 
     private Path config(String name) {
         return FabricLoader.getInstance()
@@ -72,43 +74,10 @@ public class TitleScreenMixin {
         }
     }
 
-    private void loadConfig() {
-        Path file = config("loggedout-config.json");
-
-        if (!Files.exists(file)) {
-            try {
-                JsonObject json = new JsonObject();
-                json.addProperty("scale", 1.0f);
-
-                Gson gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .create();
-
-                Files.writeString(file, gson.toJson(json));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return;
-        }
-
-        try {
-            JsonObject json = JsonParser.parseString(Files.readString(file))
-                    .getAsJsonObject();
-
-            if (json.has("scale")) {
-                scale = json.get("scale").getAsFloat();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Inject(method = "init", at = @At("TAIL"))
     private void loadLocation(CallbackInfo ci) {
         loadLastLocation();
-        loadConfig();
+        config.load();
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
@@ -124,8 +93,8 @@ public class TitleScreenMixin {
         double mouseX = event.x();
         double mouseY = event.y();
 
-        float scaledMouseX = (float) (mouseX / scale);
-        float scaledMouseY = (float) (mouseY / scale);
+        float scaledMouseX = (float) (mouseX / config.scale);
+        float scaledMouseY = (float) (mouseY / config.scale);
 
         int x = 10;
         int y = 10;
@@ -199,23 +168,42 @@ public class TitleScreenMixin {
         int y = 10;
 
         graphics.pose().pushMatrix();
-        graphics.pose().scale(scale, scale);
+        graphics.pose().scale(config.scale, config.scale);
 
         int lineHeight = minecraft.font.lineHeight;
 
+        // Replace the coordinate lines when Hide Coords is enabled
+        String[] displayLines = lines;
+
+        if (config.hideCoords && lines.length >= 3) {
+            displayLines = new String[lines.length - 2];
+
+            // Keep everything except the last 3 lines
+            System.arraycopy(
+                    lines,
+                    0,
+                    displayLines,
+                    0,
+                    lines.length - 3
+            );
+
+            // Replace the last 3 coordinate lines with one line
+            displayLines[displayLines.length - 1] = "Coords hidden";
+        }
+
         int maxWidth = 0;
-        for (String line : lines) {
+        for (String line : displayLines) {
             maxWidth = Math.max(maxWidth, minecraft.font.width(line));
         }
 
         int bottomRightX = x + maxWidth;
-        int bottomRightY = y + lines.length * lineHeight;
+        int bottomRightY = y + displayLines.length * lineHeight;
 
         int padding = 3;
 
         // Check if the mouse is hovering over the panel
-        float scaledMouseX = mouseX / scale;
-        float scaledMouseY = mouseY / scale;
+        float scaledMouseX = mouseX / config.scale;
+        float scaledMouseY = mouseY / config.scale;
 
         boolean isHovered = hasLocationData
                 && scaledMouseX >= x - padding
@@ -240,10 +228,10 @@ public class TitleScreenMixin {
         );
 
         // Render text
-        for (int i = 0; i < lines.length; i++) {
+        for (int i = 0; i < displayLines.length; i++) {
             drawText(
                     graphics,
-                    lines[i],
+                    displayLines[i],
                     x,
                     y + i * lineHeight
             );
