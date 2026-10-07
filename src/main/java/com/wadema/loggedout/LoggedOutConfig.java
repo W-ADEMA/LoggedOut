@@ -20,6 +20,7 @@ public class LoggedOutConfig {
             .getConfigDir()
             .resolve("loggedout-config.json");
 
+    public boolean hideInfoBox = false;
     public float scale = 1.0f;
     public boolean hideCoords = false;
 
@@ -33,6 +34,10 @@ public class LoggedOutConfig {
             JsonObject json = JsonParser
                     .parseString(Files.readString(FILE))
                     .getAsJsonObject();
+
+            if (json.has("hideInfoBox")) {
+                hideInfoBox = json.get("hideInfoBox").getAsBoolean();
+            }
 
             if (json.has("scale")) {
                 scale = json.get("scale").getAsFloat();
@@ -50,6 +55,7 @@ public class LoggedOutConfig {
     public void save() {
         try {
             JsonObject json = new JsonObject();
+            json.addProperty("hideInfoBox", hideInfoBox);
             json.addProperty("scale", scale);
             json.addProperty("hideCoords", hideCoords);
 

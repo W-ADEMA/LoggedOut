@@ -28,13 +28,31 @@ public class LoggedOutModMenu implements ModMenuApi {
                 ConfigCategory.createBuilder()
                     .name(Component.literal("General"))
 
+                    // Hide coords
+                    .option(
+                        Option.<Boolean>createBuilder()
+                            .name(Component.literal("Hide InfoBox"))
+                            .description(
+                                OptionDescription.createBuilder()
+                                    .text(Component.literal("When disabled, the mod will not display anything on your main menu. Log out coordinates will still be saved."))
+                                    .build()
+                            )
+                            .binding(
+                                false,
+                                () -> CONFIG.hideInfoBox,
+                                value -> CONFIG.hideInfoBox = value
+                            )
+                            .controller(BooleanControllerBuilder::create)
+                            .build()
+                    )
+
                     // Scale
                     .option(
                         Option.<Float>createBuilder()
                             .name(Component.literal("Scale"))
                             .description(
                                 OptionDescription.createBuilder()
-                                    .text(Component.literal("Changes the scale of the info box and its contents."))
+                                    .text(Component.literal("Changes the scale of the infobox and its contents."))
                                     .build()
                             )
                             .binding(
@@ -52,22 +70,22 @@ public class LoggedOutModMenu implements ModMenuApi {
                     )
 
                     // Hide coords
-                        .option(
-                            Option.<Boolean>createBuilder()
-                                .name(Component.literal("Hide Coords"))
-                                .description(
-                                    OptionDescription.createBuilder()
-                                        .text(Component.literal("You can still click on the info box to copy the coordinates."))
-                                        .build()
-                                )
-                                .binding(
-                                    false,
-                                    () -> CONFIG.hideCoords,
-                                    value -> CONFIG.hideCoords = value
-                                )
-                                .controller(BooleanControllerBuilder::create)
-                                .build()
-                        )
+                    .option(
+                        Option.<Boolean>createBuilder()
+                            .name(Component.literal("Hide Coords"))
+                            .description(
+                                OptionDescription.createBuilder()
+                                    .text(Component.literal("You can still click on the infobox to copy the coordinates."))
+                                    .build()
+                            )
+                            .binding(
+                                false,
+                                () -> CONFIG.hideCoords,
+                                value -> CONFIG.hideCoords = value
+                            )
+                            .controller(BooleanControllerBuilder::create)
+                            .build()
+                    )
 
                     .build()
             )
