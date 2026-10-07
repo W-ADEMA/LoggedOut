@@ -86,7 +86,7 @@ public class TitleScreenMixin {
             boolean doubleClick,
             CallbackInfoReturnable<Boolean> cir
     ) {
-        if (!hasLocationData) {
+        if (!hasLocationData || config.hideInfoBox) {
             return;
         }
 
@@ -162,6 +162,10 @@ public class TitleScreenMixin {
             float delta,
             CallbackInfo ci
     ) {
+        if (config.hideInfoBox) {
+            return;
+        }
+
         Minecraft minecraft = Minecraft.getInstance();
 
         int x = 10;
