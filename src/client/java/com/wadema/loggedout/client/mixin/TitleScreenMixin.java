@@ -52,22 +52,36 @@ public class TitleScreenMixin {
             JsonObject json = JsonParser.parseString(Files.readString(file))
                     .getAsJsonObject();
 
-            String type = json.get("Type").getAsString();
+            if (
+                json.has("Type") &&
+                json.has("WorldName") &&
+                json.has("ServerName") &&
+                json.has("ServerAddress") &&
+                json.has("Dimension") &&
+                json.has("X") &&
+                json.has("Y") &&
+                json.has("Z")
+            ) {
+                String type = json.get("Type").getAsString();
 
-            String location = type.equals("Singleplayer")
-                    ? "World: " + json.get("World").getAsString()
-                    : "Address: " + json.get("Address").getAsString();
+                String location;
+                if (type.equals("Singleplayer")) {
+                    location = "World: " + json.get("WorldName").getAsString();
+                } else {
+                    location = "Server: " + json.get("ServerName").getAsString();
+                }
 
-            lines = new String[] {
-                    "Type: " + type,
-                    location,
-                    "Dimension: " + json.get("Dimension").getAsString(),
-                    "X: " + json.get("X").getAsString(),
-                    "Y: " + json.get("Y").getAsString(),
-                    "Z: " + json.get("Z").getAsString()
-            };
+                lines = new String[] {
+                        "Type: " + type,
+                        location,
+                        "Dimension: " + json.get("Dimension").getAsString(),
+                        "X: " + json.get("X").getAsString(),
+                        "Y: " + json.get("Y").getAsString(),
+                        "Z: " + json.get("Z").getAsString()
+                };
 
-            hasLocationData = true;
+                hasLocationData = true;
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

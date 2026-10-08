@@ -21,24 +21,20 @@ public class LoggedOutClient implements ClientModInitializer {
 
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
 			if (client.player != null) {
-				double x = client.player.getX();
-				double y = client.player.getY();
-				double z = client.player.getZ();
 
-				String dimension = getDimensionName(client.player.level().dimension());
-
+				// Get variables
 				String type;
-				String locationName;
+				String worldName = "Unknown";
+				String serverName = "Unknown";
+				String serverAddress = "Unknown";
 
 				if (client.isLocalServer()) {
 					type = "Singleplayer";
 
 					if (client.getSingleplayerServer() != null) {
-						locationName = client.getSingleplayerServer()
+						worldName = client.getSingleplayerServer()
 								.getWorldData()
 								.getLevelName();
-					} else {
-						locationName = "Unknown";
 					}
 				} else {
 					type = "Multiplayer";
@@ -46,12 +42,18 @@ public class LoggedOutClient implements ClientModInitializer {
 					ServerData server = client.getCurrentServer();
 
 					if (server != null) {
-						locationName = server.ip;
-					} else {
-						locationName = "Unknown";
+						serverName = server.name;
+						serverAddress = server.ip;
 					}
 				}
 
+				String dimension = getDimensionName(client.player.level().dimension());
+
+				double x = client.player.getX();
+				double y = client.player.getY();
+				double z = client.player.getZ();
+
+				// Write to JSON
 				Path file = FabricLoader.getInstance()
 						.getConfigDir()
 						.resolve("loggedout.json");
@@ -59,13 +61,9 @@ public class LoggedOutClient implements ClientModInitializer {
 				JsonObject json = new JsonObject();
 
 				json.addProperty("Type", type);
-
-				if (type.equals("Singleplayer")) {
-					json.addProperty("World", locationName);
-				} else {
-					json.addProperty("Address", locationName);
-				}
-
+				json.addProperty("WorldName", worldName);
+				json.addProperty("ServerName", serverName);
+				json.addProperty("ServerAddress", serverAddress);
 				json.addProperty("Dimension", dimension);
 				json.addProperty("X", Math.round(x * 100.0) / 100.0);
 				json.addProperty("Y", Math.round(y * 100.0) / 100.0);
