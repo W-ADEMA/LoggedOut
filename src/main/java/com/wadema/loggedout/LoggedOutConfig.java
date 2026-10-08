@@ -23,6 +23,7 @@ public class LoggedOutConfig {
     public boolean hideInfoBox = false;
     public float scale = 1.0f;
     public boolean hideCoords = false;
+    public boolean showServerIP = false;
 
     public void load() {
         if (!Files.exists(FILE)) {
@@ -47,6 +48,10 @@ public class LoggedOutConfig {
                 hideCoords = json.get("hideCoords").getAsBoolean();
             }
 
+            if (json.has("showServerIP")) {
+                showServerIP = json.get("showServerIP").getAsBoolean();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,6 +63,7 @@ public class LoggedOutConfig {
             json.addProperty("hideInfoBox", hideInfoBox);
             json.addProperty("scale", scale);
             json.addProperty("hideCoords", hideCoords);
+            json.addProperty("showServerIP", showServerIP);
 
             Files.writeString(FILE, GSON.toJson(json));
 
