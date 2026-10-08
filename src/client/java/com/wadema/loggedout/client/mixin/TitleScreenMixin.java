@@ -68,7 +68,7 @@ public class TitleScreenMixin {
                 if (type.equals("Singleplayer")) {
                     location = "World: " + json.get("WorldName").getAsString();
                 } else {
-                    if (config.showServerIP) {
+                    if (!config.showServerIP) {
                         location = "Server: " + json.get("ServerName").getAsString();
                     } else {
                         location = "Server: " + json.get("ServerAddress").getAsString();
@@ -94,8 +94,8 @@ public class TitleScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void loadLocation(CallbackInfo ci) {
-        loadLastLocation();
         config.load();
+        loadLastLocation();
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
