@@ -87,6 +87,26 @@ public class LoggedOutModMenu implements ModMenuApi {
                             .build()
                     )
 
+                    // Show server IP
+                    .option(
+                        Option.<Boolean>createBuilder()
+                            .name(Component.literal("Show server IP"))
+                            .description(
+                                OptionDescription.createBuilder()
+                                    .text(Component.literal(
+                                            "Shows the server IP address instead of the server name. Useful for people who keep the default \"Minecraft Server\" name."
+                                    ))
+                                    .build()
+                            )
+                            .binding(
+                                false,
+                                () -> CONFIG.showServerIP,
+                                value -> CONFIG.showServerIP = value
+                            )
+                            .controller(BooleanControllerBuilder::create)
+                            .build()
+                    )
+
                     .build()
             )
 

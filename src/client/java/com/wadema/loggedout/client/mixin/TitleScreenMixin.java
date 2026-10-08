@@ -68,7 +68,11 @@ public class TitleScreenMixin {
                 if (type.equals("Singleplayer")) {
                     location = "World: " + json.get("WorldName").getAsString();
                 } else {
-                    location = "Server: " + json.get("ServerName").getAsString();
+                    if (config.showServerIP) {
+                        location = "Server: " + json.get("ServerName").getAsString();
+                    } else {
+                        location = "Server: " + json.get("ServerAddress").getAsString();
+                    }
                 }
 
                 lines = new String[] {
